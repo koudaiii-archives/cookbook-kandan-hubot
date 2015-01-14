@@ -2,11 +2,11 @@
 IMAGE_MAPPING = {
   "ubuntu-14.04" => {
     :base => "chef/ubuntu-14.04",
-    :dest => "koudaiii/cookbook-gitbucket-ubuntu-14.04",
+    :dest => "koudaiii/cookbook-kandan-hubot-ubuntu-14.04",
   },
   "centos-6" => {
     :base => "chef/centos-6",
-    :dest => "koudaiii/cookbook-gitbucket-centos-6"
+    :dest => "koudaiii/cookbook-kandan-hubot-centos-6"
   },
 }
 

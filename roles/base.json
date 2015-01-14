@@ -4,7 +4,6 @@
   "json_class" : "Chef::Role",
   "tz": "Asia/Tokyo",
   "override_attributes": {
-    }
   },
   "run_list": [
     "recipe[my_timezone]",
