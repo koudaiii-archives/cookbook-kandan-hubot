@@ -1,0 +1,11 @@
+{
+  "name": "base",
+  "chef_type" : "role",
+  "json_class" : "Chef::Role",
+  "override_attributes": {
+    }
+  },
+  "run_list": [
+    "recipe[my_postfix]",
+  ]
+}

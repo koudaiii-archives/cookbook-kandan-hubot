@@ -1,0 +1,10 @@
+{
+  "name": "web",
+  "chef_tpe" : "role",
+  "json_class" : "Chef::Role",
+  "override_attributes": {
+  },
+  "run_list": [
+    "recipe[my_rbenv]"
+  ]
+}
