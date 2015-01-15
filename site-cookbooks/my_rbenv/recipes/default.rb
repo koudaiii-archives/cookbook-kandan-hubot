@@ -6,7 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 
-%w{git curl}.each do |pkg|
+%w{git curl gcc g++ make nodejs}.each do |pkg|
   package pkg do
     action :install
   end
@@ -21,8 +21,6 @@ case node[:platform]
 when "redhat", "centos", "amazon", "oracle"
   package "curl-devel"
   package "sqlite-devel"
-  package "gcc"
-  package "make"
   package "zlib"
   package "openssl"
   package "openssl-devel"
@@ -50,7 +48,6 @@ when "ubuntu", "debian"
   package "openssl"
   package 'libssl-dev'
   package "libreadline-dev"
-  package "libxml2-dev"
   package "libxslt1-dev"
   package "ncurses-dev"
   package "pkg-config"

@@ -16,6 +16,9 @@ describe service('postfix') do
   it { should be_enabled }
 end
 
+describe service('postgresql') do
+  it { should be_enabled }
+end
 #describe package('nginx') do
 #  it { should be_installed }
 #end

@@ -1,10 +1,10 @@
 {
-  "name": "ruby",
-  "chef_tpe" : "role",
+  "name": "mail",
+  "chef_type" : "role",
   "json_class" : "Chef::Role",
   "override_attributes": {
   },
   "run_list": [
-    "recipe[my_rbenv]"
+    "recipe[my_postfix]"
   ]
 }
