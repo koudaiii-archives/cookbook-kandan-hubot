@@ -11,9 +11,10 @@ end
 describe file('/etc/default/locale'), :if => os[:family] == 'ubuntu' do
   it { should contain 'ja_JP.UTF-8' }
 end
-#describe command('echo $LANG') do
-#  its(:stderr) { should match /ja/ }
-#end
+
+describe service('postfix') do
+  it { should be_enabled }
+end
 
 #describe package('nginx') do
 #  it { should be_installed }
