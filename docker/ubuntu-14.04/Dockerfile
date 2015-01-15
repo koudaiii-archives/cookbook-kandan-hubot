@@ -24,6 +24,7 @@ RUN echo "local_mode      true" >> /etc/chef/client.rb;  \
 RUN echo '{"run_list":["role[base]"]}' > /var/chef/node/base.json
 RUN echo '{"run_list":["role[mail]"]}' > /var/chef/node/mail.json
 RUN echo '{"run_list":["role[db]"]}' > /var/chef/node/db.json
+RUN echo '{"run_list":["role[ruby]"]}' > /var/chef/node/ruby.json
 
 COPY ./cookbooks /cookbooks
 COPY ./roles /roles
@@ -31,3 +32,4 @@ COPY ./roles /roles
 RUN chef-client -j /var/chef/node/base.json
 RUN chef-client -j /var/chef/node/mail.json
 RUN chef-client -j /var/chef/node/db.json
+RUN chef-client -j /var/chef/node/ruby.json

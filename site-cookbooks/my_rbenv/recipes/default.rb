@@ -6,7 +6,15 @@
 #
 # All rights reserved - Do Not Redistribute
 
-%w{git curl gcc g++ make nodejs}.each do |pkg|
+case node[:platform]
+when "redhat", "centos", "amazon", "oracle"
+  execute "install_nodejs" do
+    command "curl -sL https://rpm.nodesource.com/setup | bash -"
+    not_if { File.exists?("setup")}
+  end
+end
+
+%w{git curl gcc make nodejs}.each do |pkg|
   package pkg do
     action :install
   end
@@ -37,6 +45,7 @@ when "redhat", "centos", "amazon", "oracle"
   package "libxml2"
   package "libxslt"
 when "ubuntu", "debian"
+  package "g++"
   package "aptitude"
   package "libssl1.0.0"
   package "libc6-dev"
