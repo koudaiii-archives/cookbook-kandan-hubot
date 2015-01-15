@@ -20,24 +20,10 @@ describe service('postgresql') do
   it { should be_enabled }
 end
 
-describe command('ruby -v') do
-   its(:stderr) { should match /ruby 1\.9\.3-p551/ }
-end
-
-describe file('/usr/local/rbenv/versions/1.9.3-p551')do
-  it { should be_directory }
-end
-
-describe package('rbenv-rehash') do
-  it { should be_installed.by('gem') }
-end
-
-describe package('bundler') do
-  it { should be_installed.by('gem') }
-end
-
-describe package('execjs') do
-  it { should be_installed.by('gem') }
+describe command('/usr/local/rbenv/versions/1.9.3-p551/bin/gem list') do
+   its(:stdout) { should match 'bundler' }
+   its(:stdout) { should match 'execjs' }
+   its(:stdout) { should match 'rbenv-rehash' }
 end
 
 
