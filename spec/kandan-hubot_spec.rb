@@ -4,6 +4,13 @@ describe file('/etc/localtime') do
   it { should contain 'JST' }
 end
 
+describe file('/etc/sysconfig/i18n'), :if => os[:family] == 'redhat' do
+  it { should contain 'ja_JP.UTF-8' }
+end
+
+describe file('/etc/default/locale'), :if => os[:family] == 'ubuntu' do
+  it { should contain 'ja_JP.UTF-8' }
+end
 #describe command('echo $LANG') do
 #  its(:stderr) { should match /ja/ }
 #end
