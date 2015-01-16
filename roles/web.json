@@ -5,7 +5,7 @@
   "override_attributes": {
     "my_nginx" : {
       "servername" : "webapp"
-    },
+    }
   },
   "run_list": [
     "recipe[my_nginx]",
