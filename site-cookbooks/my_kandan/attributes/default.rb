@@ -10,6 +10,6 @@ default["kandan"]["conf"]           = "#{path}/current/config/environments/produ
 # Database setting
 default["kandan"]["database"]["host"]     = "localhost"
 default["kandan"]["database"]["name"]     = "kandan_production"
-default["kandan"]["database"]["username"] = "root"
+default["kandan"]["database"]["username"] = "kandan"
 default["kandan"]["database"]["password"] = "iloverandompasswordsbutthiswilldo"
 default["kandan"]["database_master_role"] = "kandan_database_master"

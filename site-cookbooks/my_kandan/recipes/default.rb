@@ -60,7 +60,7 @@ application "kandan" do
     }
 
     database do
-      adapter  "pg"
+      adapter  "postgresql"
       host     database_params[:host]
       database database_params[:name]
       username database_params[:username]
@@ -71,8 +71,8 @@ end
 
 execute "bundle_install" do
   action :run
-  command "/usr/local/rbenv/shims/bundle install"
-  user node["kandan"]["user"]
+  command "/usr/local/rbenv/shims/bundle install --without development test"
+  user "root"
   cwd "#{node['kandan']['path']}/current"
 end
 
@@ -83,11 +83,18 @@ execute "bootstrap_kandan" do
   cwd "#{node['kandan']['path']}/current"
 end
 
-file node["kandan"]["conf"] do
-  _file = Chef::Util::FileEdit.new(path)
-  _file.search_file_replace_line(/config.serve_static_assets.*$/, "config.serve_static_assets = true")
-  content _file.send(:editor).lines.join
+template node["kandan"]["conf"] do
+  source 'production.rb.erb'
+  owner  'kandan'
+  group  'kandan'
+  mode   '0644'
 end
+
+#file node["kandan"]["conf"] do
+#  _file = Chef::Util::FileEdit.new(path)
+#  _file.search_file_replace_line(/config.serve_static_assets.*$/, "config.serve_static_assets = true")
+#  content _file.send(:editor).lines.join
+#end
 
 execute "assets_precompile" do
   action :run

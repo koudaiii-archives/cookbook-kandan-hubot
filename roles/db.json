@@ -5,7 +5,10 @@
   "override_attributes": {
     "postgresql": {
       "password": {
-        "postgres": "iloverandompasswordsbutthiswilldo"
+        "postgres": "9f252929b207eb857b43551f34616d6a"
+      },
+      "config_pgtune" : {
+        "db_type" : "web"
       }
     }
   },
