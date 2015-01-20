@@ -98,7 +98,8 @@ end
 
 execute "assets_precompile" do
   action :run
-  command "RAILS_ENV=production /usr/local/rbenv/shims/bundle exec rake assets:precompile"
+#  command "RAILS_ENV=production /usr/local/rbenv/shims/bundle exec rake assets:precompile:all"
+  command "/usr/local/rbenv/versions/1.9.3-p551/bin/ruby /usr/local/rbenv/versions/1.9.3-p551/bin/rake assets:precompile:all RAILS_ENV=production RAILS_GROUPS=assets"
   user node["kandan"]["user"]
   cwd "#{node['kandan']['path']}/current"
 end
@@ -106,7 +107,7 @@ end
 
 execute "start_thin_for_kandan" do
   action :run
-  command "/usr/local/rbenv/shims/bundle exec thin start -e production -p 80 -l log/thin.log -d"
+  command "/usr/local/rbenv/shims/bundle exec thin start -e production -p 8080 -l log/thin.log -d"
   user node["kandan"]["user"]
   cwd "#{node['kandan']['path']}/current"
   not_if { ::File.exist?("#{node["kandan"]["path"]}/shared/pids/thin.pid") }

@@ -35,6 +35,19 @@ Change URL and kandan version
   },
 ```
 
+* setup hubot
+```
+export HUBOT_KANDAN_HOST=YOUR_KANDAN_HOST
+# Portが80以外であれば設定する
+export HUBOT_KANDAN_PORT=YOUR_KANDAN_PORT
+# 先ほど取得したアクセスキー
+export HUBOT_KANDAN_TOKEN=YOUR_KANDAN_ACCESS_KEY
+# info以外に設定する場合
+export HUBOT_LOG_LEVEL=debug
+
+```
+
+
 ### Requirement
 
 * cookbook 'nginx'

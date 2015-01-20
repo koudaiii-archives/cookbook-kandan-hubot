@@ -10,6 +10,9 @@ default["kandan"]["conf"]           = "#{path}/current/config/environments/produ
 # Database setting
 default["kandan"]["database"]["host"]     = "localhost"
 default["kandan"]["database"]["name"]     = "kandan_production"
-default["kandan"]["database"]["username"] = "kandan"
-default["kandan"]["database"]["password"] = "iloverandompasswordsbutthiswilldo"
+default["kandan"]["database"]["username"] = "postgres"
+default["kandan"]["database"]["password"] = "9f252929b207eb857b43551f34616d6a"
 default["kandan"]["database_master_role"] = "kandan_database_master"
+
+# hubot setting
+default["kandan"]["hubot_download_url"] = "https://github.com/github/hubot/archive/v2.4.7.zip"

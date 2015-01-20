@@ -1,4 +1,7 @@
 DEPENDENCIES
+  application_ruby
+    git: git://github.com/poise/application_ruby.git
+    revision: fde770d176b5d0519982e2ec93bcf2d1a3ad35bb
   locale
   my_kandan
     path: site-cookbooks/my_kandan
