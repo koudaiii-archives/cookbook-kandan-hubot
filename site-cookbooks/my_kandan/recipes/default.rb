@@ -90,15 +90,8 @@ template node["kandan"]["conf"] do
   mode   '0644'
 end
 
-#file node["kandan"]["conf"] do
-#  _file = Chef::Util::FileEdit.new(path)
-#  _file.search_file_replace_line(/config.serve_static_assets.*$/, "config.serve_static_assets = true")
-#  content _file.send(:editor).lines.join
-#end
-
 execute "assets_precompile" do
   action :run
-#  command "RAILS_ENV=production /usr/local/rbenv/shims/bundle exec rake assets:precompile:all"
   command "/usr/local/rbenv/versions/1.9.3-p551/bin/ruby /usr/local/rbenv/versions/1.9.3-p551/bin/rake assets:precompile:all RAILS_ENV=production RAILS_GROUPS=assets"
   user node["kandan"]["user"]
   cwd "#{node['kandan']['path']}/current"
@@ -120,3 +113,4 @@ execute "restart_thin_for_kandan" do
   cwd "#{node['kandan']['path']}/current"
 end
 
+include_recipe 'my_kandan::hubot'
