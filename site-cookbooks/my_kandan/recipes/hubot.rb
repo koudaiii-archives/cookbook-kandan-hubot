@@ -1,7 +1,3 @@
-package "zip" do
-  action :install
-end
-
 execute "start_boot_hubot" do
   action :run
   command "RAILS_ENV=production /usr/local/rbenv/shims/bundle exec rake kandan:boot_hubot"
@@ -9,40 +5,58 @@ execute "start_boot_hubot" do
   cwd "#{node['kandan']['path']}/current"
 end
 
-remote_file "/opt/hubot.zip" do
-  source node["kandan"]["hubot_download_url"]
-  user node["kandan"]["user"]
-  group node["kandan"]["user"]
-  mode "0755"
+git "/opt/hubot" do
+  repository node["kandan"]["hubot_git_repository"]
+  action :sync
+  revision "v2.4.7"
+  user "root"
+  group "root"
+  not_if { ::File.directory?("/opt/hubot") }
 end
 
-script "download_hubot" do
+# ubuntu:ERR usr/bin/env: node: No such file or directory
+# because legacy node
+case node[:platform]
+when "redhat", "centos", "amazon", "oracle"
+# not running
+when "ubuntu", "debian"
+  execute "lebacy_node" do
+    command "ln -s /usr/bin/nodejs /usr/local/bin/node"
+    user "root"
+  end
+end
+
+script "install_hubot" do
   interpreter "bash"
   user        "root"
   code <<-EOL
-    cd /opt/
-    unzip hubot.zip
-  EOL
-  not_if { ::File.directory?("/opt/hubot-2.4.7") }
-end
-
-directory "/opt/hubot-2.4.7" do
-  owner node["kandan"]["user"]
-  group node["kandan"]["user"]
-  mode '0755'
-end
-
-script "download_hubot" do
-  interpreter "bash"
-  user        node["kandan"]["user"]
-  code <<-EOL
-    cd /opt/hubot-2.4.7
+    cd /opt/hubot/
     npm install
-    make package
-    cd hubot
+    npm install -g yo generator-hubot
+    mkdir -p hubot
+    yo hubot
     git clone https://github.com/kandanapp/hubot-kandan.git node_modules/hubot-kandan
     npm install faye
     npm install ntwitter
   EOL
-  not_if { ::File.directory?("/opt/hubot-2.4.7") }
 end
+
+file "/opt/hubot/node_modules/hubot-kandan/package.json" do
+  content lazy {
+    _file = Chef::Util::FileEdit.new(path)
+    _file.search_file_replace_line(/\"1\.0\"/, "  \"version\"\:     \"1\.0\.0\"\,\n")
+    content _file.send(:editor).lines.join
+  }
+end
+
+
+# TODO npm install forever -g
+template "hubot.sh" do
+ source "hubot.sh.erb"
+ path "/opt/hubot/hubot.sh"
+ mode 0755
+ owner
+ group
+ not_if { File.exist?("/opt/hubot/hubot.sh") }
+end
+

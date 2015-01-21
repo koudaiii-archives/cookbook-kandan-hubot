@@ -21,9 +21,6 @@ Change URL and kandan version
   "override_attributes": {
     "my_nginx" : {
       "servername" : "webapp"
-    },
-    "my_kandan" : {
-      "download_url" : "https://github.com/takezoe/gitbucket/releases/download/2.7/gitbucket.war"
     }
   }
 ```
@@ -36,15 +33,11 @@ Change URL and kandan version
 ```
 
 * setup hubot
+root user
 ```
-export HUBOT_KANDAN_HOST=YOUR_KANDAN_HOST
-# Portが80以外であれば設定する
-export HUBOT_KANDAN_PORT=YOUR_KANDAN_PORT
-# 先ほど取得したアクセスキー
-export HUBOT_KANDAN_TOKEN=YOUR_KANDAN_ACCESS_KEY
-# info以外に設定する場合
-export HUBOT_LOG_LEVEL=debug
-
+# cd /opt/hubot/
+# yo hubot
+# sh hubot.sh start
 ```
 
 
@@ -81,7 +74,7 @@ bundle exec berks vendor cookbooks
 bundle exec knife solo bootstrap YourServer
 ```
 
-* [Defalut]Gitbucket accepts the "http://webapp/". Please set up "/etc/nginx/sites-enabled/app".
+* [Defalut]kandan accepts the "http://webapp/". Please set up "/etc/nginx/sites-enabled/app".
 
 ### Develop(Vagrant)
 

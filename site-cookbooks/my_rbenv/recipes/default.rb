@@ -14,7 +14,7 @@ when "redhat", "centos", "amazon", "oracle"
   end
 end
 
-%w{git curl gcc make nodejs}.each do |pkg|
+%w{git curl gcc make nodejs npm}.each do |pkg|
   package pkg do
     action :install
   end
@@ -113,7 +113,7 @@ template "default-gems" do
   mode 0755
   owner "root"
   group "root"
-  not_if { File.exists?("/usr/local/rbenv/default-gems") }
+  not_if { File.exist?("/usr/local/rbenv/default-gems") }
 end
 
 include_recipe 'my_rbenv::ruby_install'

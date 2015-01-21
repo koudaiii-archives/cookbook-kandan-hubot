@@ -26,12 +26,11 @@ describe command('/usr/local/rbenv/versions/1.9.3-p551/bin/gem list') do
    its(:stdout) { should match 'rbenv-rehash' }
 end
 
+describe package('nginx') do
+  it { should be_installed }
+end
 
-#describe package('nginx') do
-#  it { should be_installed }
-#end
-#
-#describe service('nginx') do
-#  it { should be_enabled }
-#end
+describe service('nginx') do
+  it { should be_enabled }
+end
 

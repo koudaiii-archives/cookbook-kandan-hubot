@@ -15,4 +15,4 @@ default["kandan"]["database"]["password"] = "9f252929b207eb857b43551f34616d6a"
 default["kandan"]["database_master_role"] = "kandan_database_master"
 
 # hubot setting
-default["kandan"]["hubot_download_url"] = "https://github.com/github/hubot/archive/v2.4.7.zip"
+default["kandan"]["hubot_git_repository"] = "https://github.com/github/hubot.git"
