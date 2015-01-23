@@ -60,6 +60,23 @@ Kandan::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+    # メール設定のロード
+  mail_settings_file_name = Rails.root + '/config/local/mail_settings.yml'
+  if FileTest.exist? mail_settings_file_name
+    mail_settings = YAML.load_file mail_settings_file_name
+    if mail_settings.empty?
+      config.action_mailer.raise_delivery_errors = false
+    else
+      config.action_mailer.raise_delivery_errors = true
+      mail_settings.each do |prop, settings|
+        setting_values = (settings.instance_of?(Hash) ? settings.reduce({}) { |r, e| r.merge(e[0].to_sym => e[1]) } : settings)
+        config.action_mailer.send("#{prop}=", setting_values)
+      end
+    end
+  else
+    config.action_mailer.raise_delivery_errors = false
+  end
+  config.action_mailer.default_url_options = { :host => "<%= node['my_nginx']['servername'] %>" }
 
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)

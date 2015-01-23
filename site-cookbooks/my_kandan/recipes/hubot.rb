@@ -6,12 +6,43 @@ execute "start_boot_hubot" do
 end
 
 git "/opt/hubot" do
-  repository node["kandan"]["hubot_git_repository"]
+  repository node["hubot"]["repo"]
   action :sync
-  revision "v2.4.7"
+  revision node["hubot"]["revision"]
   user "root"
   group "root"
   not_if { ::File.directory?("/opt/hubot") }
+end
+
+directory '/opt/hubot/node_modules' do
+  owner 'root'
+  group 'root'
+  mode '0755'
+end
+
+directory "/opt/hubot/hubot" do
+  owner "root"
+  group "root"
+  mode '0755'
+end
+
+git "/opt/hubot/node_modules/hubot-kandan" do
+  repository node["hubot-kandan"]["repo"]
+  action :sync
+  revision node["hubot-kandan"]["revision"]
+  user "root"
+  group "root"
+  not_if { ::File.directory?("/opt/hubot/node_modules/hubot-kandan") }
+end
+
+# Fix npm error when booting hubot
+# https://github.com/uk-ar/hubot-kandan/commit/070a90137c1bd9215765b4c1ff30184b56eb3dea
+file "/opt/hubot/node_modules/hubot-kandan/package.json" do
+  content lazy {
+    _file = Chef::Util::FileEdit.new(path)
+    _file.search_file_replace_line(/\"1\.0\"/, "  \"version\"\:     \"1\.0\.0\"\,\n")
+    content _file.send(:editor).lines.join
+  }
 end
 
 # ubuntu:ERR usr/bin/env: node: No such file or directory
@@ -26,6 +57,7 @@ when "ubuntu", "debian"
   end
 end
 
+# git clone https://github.com/kandanapp/hubot-kandan.git node_modules/hubot-kandan
 script "install_hubot" do
   interpreter "bash"
   user        "root"
@@ -33,22 +65,11 @@ script "install_hubot" do
     cd /opt/hubot/
     npm install
     npm install -g yo generator-hubot
-    mkdir -p hubot
     yo hubot
-    git clone https://github.com/kandanapp/hubot-kandan.git node_modules/hubot-kandan
     npm install faye
     npm install ntwitter
   EOL
 end
-
-file "/opt/hubot/node_modules/hubot-kandan/package.json" do
-  content lazy {
-    _file = Chef::Util::FileEdit.new(path)
-    _file.search_file_replace_line(/\"1\.0\"/, "  \"version\"\:     \"1\.0\.0\"\,\n")
-    content _file.send(:editor).lines.join
-  }
-end
-
 
 # TODO npm install forever -g
 template "hubot.sh" do
@@ -60,3 +81,11 @@ template "hubot.sh" do
  not_if { File.exist?("/opt/hubot/hubot.sh") }
 end
 
+cron "auto_run_hubot" do
+  minute '*'
+  hour '*'
+  weekday '*'
+  user "root"
+  path "/usr/local/rbenv/shims:/usr/local/rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+  command "cd /opt/hubot;sh /opt/hubot/hubot.sh start"
+end

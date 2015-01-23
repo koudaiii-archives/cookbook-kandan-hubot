@@ -32,7 +32,6 @@ end
   end
 end
 
-
 application "kandan" do
   action :deploy
   path node["kandan"]["path"]
@@ -72,7 +71,7 @@ end
 execute "bundle_install" do
   action :run
   command "/usr/local/rbenv/shims/bundle install --without development test"
-  user "root"
+  user node["kandan"]["user"]
   cwd "#{node['kandan']['path']}/current"
 end
 
@@ -85,8 +84,22 @@ end
 
 template node["kandan"]["conf"] do
   source 'production.rb.erb'
-  owner  'kandan'
-  group  'kandan'
+  owner node["kandan"]["user"]
+  group node["kandan"]["user"]
+  mode   '0644'
+end
+
+directory "/opt/kandan/current/config/local" do
+  owner node["kandan"]["user"]
+  group node["kandan"]["user"]
+  mode "0755"
+  recursive true
+end
+
+template "/opt/kandan/current/config/local/mail_settings.yml" do
+  source 'mail_settings.yml.erb'
+  owner node["kandan"]["user"]
+  group node["kandan"]["user"]
   mode   '0644'
 end
 
@@ -96,7 +109,6 @@ execute "assets_precompile" do
   user node["kandan"]["user"]
   cwd "#{node['kandan']['path']}/current"
 end
-
 
 execute "start_thin_for_kandan" do
   action :run
@@ -109,7 +121,7 @@ end
 execute "restart_thin_for_kandan" do
   action :nothing
   command "/usr/local/rbenv/shims/bundle exec thin restart"
-  user "root"
+  user node["kandan"]["user"]
   cwd "#{node['kandan']['path']}/current"
 end
 

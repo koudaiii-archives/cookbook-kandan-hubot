@@ -1,26 +1,19 @@
 #!/bin/bash
 
-export HUBOT_KANDAN_HOST="localhost"
+export HUBOT_KANDAN_HOST="127.0.0.1"
 export HUBOT_KANDAN_PORT="8080"
 export HUBOT_KANDAN_TOKEN=`cd /opt/kandan/current; RAILS_ENV=production bundle exec rake kandan:hubot_access_key | awk '/^Your/ { print $6 }'`
-BOT_ROOT=/opt/hubot
+STATUS=`ps -ef | grep hubot | grep -ve grep | grep -ve hubot.sh | wc -l`
 
 case $1 in
-  "start" | "stop" | "restart" )
-#    forever $1 \
-#      --pidFile $BOT_ROOT/hubot.pid \
-#      --append \
-#      --verbose \
-#      --minUptime 10 \
-#      --spinSleepTime 100 \
-#      -l $BOT_ROOT/hubot.log \
-#      -c $BOT_ROOT/node_modules/.bin/hubot -a kandan 
-./bin/hubot -a kandan &
-    ;;
-  "status" )
-#    forever list
+  "start" )
+  if [ "$STATUS" -eq 0 ]; then
+	./bin/hubot -a kandan &
+  else
+	echo "already"
+  fi
     ;;
   * )
-    echo "Usage: hubot.sh {start|stop|restart}"
+    echo "Usage: hubot.sh {start}"
     ;;
 esac

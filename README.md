@@ -20,31 +20,23 @@ Change URL and kandan version
 ```roles/web.json
   "override_attributes": {
     "my_nginx" : {
-      "servername" : "webapp"
+      "servername" : "YourServer"
+    },
+    "my_kandan" : {
+      "servername" : "YourServer"
     }
   }
 ```
 
 ```roles/base.json
   "tz": "Asia/Tokyo",
-  "override_attributes": {
-    }
-  },
 ```
-
-* setup hubot
-root user
-```
-# cd /opt/hubot/
-# yo hubot
-# sh hubot.sh start
-```
-
 
 ### Requirement
 
-* cookbook 'nginx'
-* cookbook 'timezone-ii'
+* Ruby
+* bundler
+* SSH login(admin)
 
 ### Install
 
@@ -62,12 +54,6 @@ root user
 bundle install
 ```
 
-* build berks
-
-```bash
-bundle exec berks vendor cookbooks
-```
-
 * provision server
 
 ```bash
@@ -75,6 +61,13 @@ bundle exec knife solo bootstrap YourServer
 ```
 
 * [Defalut]kandan accepts the "http://webapp/". Please set up "/etc/nginx/sites-enabled/app".
+
+* setup hubot
+
+```bash
+$ ssh root@YourServer
+# cd /opt/hubot/ ; yo hubot
+```
 
 ### Develop(Vagrant)
 
@@ -97,13 +90,16 @@ vagrant ssh-config >> ~/.ssh/config
 ```~/.ssh/config
 Host webapp
 ```
+* set Host Only Network in virtualbox
+
+[Qiita](http://qiita.com/Itomaki/items/a0a29f29d43a7bd24a32)
 
 #### build and run test
 
 * bootstrapping
 
 ```bash
-bundle exec rake vagrant:bootstrap
+bundle exec rake vagrant:init
 ```
 
 ### Test(Docker)
